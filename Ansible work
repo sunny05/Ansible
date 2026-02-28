@@ -1,0 +1,173 @@
+🚀 From Fresh VM to Automated DevOps Lab with Ansible & Docker
+
+Recently, I built my own 3-Node DevOps Lab to understand automation at a deeper level using Ansible and Docker.
+
+Here’s a summary of my journey and key learnings.
+
+🔹 What is Ansible?
+
+Ansible is an open-source automation tool used for:
+
+Configuration Management
+
+Application Deployment
+
+Infrastructure Automation
+
+It works in an agentless manner using SSH and simple YAML playbooks.
+
+🔹 Why Ansible?
+
+✔ Eliminates repetitive manual work
+✔ Ensures environment consistency
+✔ Reduces deployment errors
+✔ Enables Infrastructure as Code
+✔ Perfect for DevOps automation
+
+🔹 Where & When Do We Use It?
+
+Provisioning cloud servers
+
+Deploying applications
+
+Installing packages (like Nginx, Docker, etc.)
+
+Managing multi-node environments
+
+CI/CD integrations
+
+In real projects, Ansible works alongside Git, CI/CD tools, container platforms, and monitoring systems.
+
+
+🔹 How I Built My 3-Node DevOps Lab (Step-by-Step)
+✅ Step 1: Installed Docker on VM
+apt-get update
+curl -fsSL https://get.docker.com -o install-docker.sh
+sh install-docker.sh
+docker --version
+
+✅ Step 2: Created 3-Node Environment Using Containers
+
+ansible_master (Control Node)
+
+target1
+
+target2
+
+docker run -itd --name ansible_master ubuntu /bin/bash
+docker run -itd --name target1 ubuntu /bin/bash
+docker run -itd --name target2 ubuntu /bin/bash
+
+
+This simulated a real infrastructure setup.
+
+✅ Step 3: Verified Containers
+docker ps
+docker inspect target1
+
+
+Inspection helped understand networking, metadata, and container IP allocation — critical for automation.
+
+✅ Step 4: Installed Ansible on Control Node
+
+Inside ansible_master:
+
+apt install ansible
+ansible --version
+
+
+Configured inventory:
+
+vi /etc/ansible/hosts
+
+
+Generated SSH keys & connected to target:
+
+ssh-keygen
+ssh-copy-id root@<target-ip>
+
+
+Verified connectivity:
+
+ssh root@<target-ip>
+
+✅ Step 5: Automated Nginx Installation
+
+Created playbook:
+
+vi installnginx.yaml
+
+
+Executed:
+
+ansible-playbook installnginx.yaml
+
+
+Nginx was installed automatically on target node — no manual login required.
+
+This demonstrated:
+
+✔ Idempotency
+✔ Centralized automation
+✔ Real-world configuration management
+
+✅ Step 6: Created Custom Docker Images
+
+After configuration:
+
+docker commit target1 rahulnegi17/target1:v1
+docker commit ansible_master rahulnegi17/ansible_master:v1
+
+
+Why this matters?
+
+Environment consistency
+
+Version control
+
+Reproducibility
+
+✅ Step 7: Pushed Images to Docker Hub
+docker login
+docker push rahulnegi17/ansible_master:v1
+docker push rahulnegi17/target1:v1
+
+
+Now images are globally accessible.
+
+✅ Step 8: Tested Portability
+docker image rm rahulnegi17/ansible_master:v1
+docker pull rahulnegi17/ansible_master:v1
+
+
+Confirmed:
+
+✔ Image versioning works
+✔ Registry integration works
+✔ Infrastructure is portable
+
+🔥 Key DevOps Takeaways
+
+Containers are perfect for lab simulations
+
+Versioned images improve deployment reliability
+
+Automation reduces human error
+
+Infrastructure becomes reproducible
+
+Hands-on labs build real confidence
+
+💡 Why This Matters in Real Projects
+
+In production environments:
+
+Teams build custom images
+
+Push to registries
+
+Use them in CI/CD pipelines
+
+Deploy consistently across staging & production
+
+Ansible acts as the automation engine connecting everything.
